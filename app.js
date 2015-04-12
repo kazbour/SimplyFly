@@ -12,7 +12,6 @@ var session = require("express-session");
 var app = express();
 var db = require("./models");
 
-//npm install --save pg body-parser method-override bcrypt ph-hstore sequelize ejs
 
 
 //////////////////////////////////////////////////////////////
@@ -21,8 +20,10 @@ var db = require("./models");
 
 app.set('view engine', 'ejs');
 
+app.set("view engine", "ejs");	
+// This defines req.session
 // app.use(session({
-// 	secret: "I'm very very secret thing",
+// 	secret: "If I tell you what I am it won't be a secret anymore.",
 // 	resave: false,
 // 	save: {
 // 		uninitialize: true
@@ -41,26 +42,34 @@ app.use(express.static('public'));
 /*					ROUTES  								*/
 //////////////////////////////////////////////////////////////
 
+/****  index   ****/
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.render('index');
 });
 
+app.get('/logout', function (req,res) {
+	res.render('logout');
+})
 
+/****  user/new + user/id ****/
 app.get('/signup', function (req,res)	{
-	res.send("This will be my sign up page");
+	res.render('signup');
 });
 
-app.get('/user', function (req,res)	{
-	res.send("This will be my user page. Hello there User");
-	console.log("/lksdjflksdjflkds");
+/****  user/id   ****/
+app.get('/profile', function (req,res)	{
+	res.render('profile');
 });
 
-app.get('/user/edit', function (req,res)	{
-	res.send("This will be my user page. Hello there User");
-	console.log("/lksdjflksdjflkds");
+/****  user/id/edit   ****/
+app.get('/profile/edit', function (req,res)	{
+	res.render('edit');
 });
 
-
+/****  user/id(delete)   ****/
+app.get('/profile/delete', function (req,res)	{
+	res.render('delete');
+});
 
 
 
