@@ -11,6 +11,7 @@ var methodOverride = require('method-override');
 var session = require("express-session");
 var app = express();
 var db = require("./models");
+var Sequelize = require('sequelize');
 
 
 
@@ -20,21 +21,47 @@ var db = require("./models");
 
 app.set('view engine', 'ejs');
 
-app.set("view engine", "ejs");	
-// This defines req.session
-// app.use(session({
-// 	secret: "If I tell you what I am it won't be a secret anymore.",
-// 	resave: false,
-// 	save: {
-// 		uninitialize: true
-// 	}
-// }));
+
+//Cookie
+app.use(session({
+	secret: "If I tell you it won't be a secret anymore.",
+	resave: false,
+	save: {uninitialized: true}
+}));
+
+
+//Define login functionality
+app.use("/", function (req, res, next) {
+	req.login = function (user) {
+        req.session.userId = user.id;
+        console.log(user.id);
+    };
+
+//Define session 
+	req.currentUser = function () {
+	    return db.User.
+	    	find(req.session.userId)
+	      	.then(function (user) {
+		        req.user = user;
+		        return user;
+			});
+  	};
+
+//Define logout functionality  
+	req.logout = function () {
+		req.session.userId = null;
+		req.user = null;
+  	};
+
+  	next();
+
+});
 
 app.use(methodOverride("_method"));
 
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 
 
 
@@ -42,34 +69,139 @@ app.use(express.static('public'));
 /*					ROUTES  								*/
 //////////////////////////////////////////////////////////////
 
-/****  index   ****/
-app.get('/', function (req, res) {
-  res.render('index');
+
+
+/****  FRONT PAGE   ****/
+app.get('/', function (req,res)	{
+	res.render('index');
 });
 
-app.get('/logout', function (req,res) {
-	res.render('logout');
-})
 
-/****  user/new + user/id ****/
-app.get('/signup', function (req,res)	{
-	res.render('signup');
+/****  LOGIN   ****/
+app.get('/users/login', function (req, res) {
+	req.currentUser().then(function(user){
+		if (user) {
+			res.redirect('/users/profile');
+		} else {
+			res.render("users/login", {err: req.session.error});
+		}
+	});
 });
 
-/****  user/id   ****/
-app.get('/profile', function (req,res)	{
-	res.render('profile');
+
+app.post('/users/login', function(req,res){
+	var email = req.body.email;
+	var password = req.body.password;
+	db.User.authenticate(email,password)
+	  .then(function(myUser){
+	  	if(myUser) {
+	  		req.login(myUser);
+	  		res.redirect('/users/profile');
+	  	} else {
+	  		req.session.error = "Wrong email or password";
+	  		res.redirect('/users/login');
+	  	}
+	  }); 
 });
 
-/****  user/id/edit   ****/
-app.get('/profile/edit', function (req,res)	{
-	res.render('edit');
+/****  SIGNUP ****/
+app.get('/users/signup', function (req,res)	{
+	res.render('users/signup');
 });
 
-/****  user/id(delete)   ****/
-app.get('/profile/delete', function (req,res)	{
-	res.render('delete');
+
+app.post('/users/signup', function(req,res){
+	var email = req.body.email;
+	var password = req.body.password;
+	db.User.createSecure(email,password)
+	.then(function(signupUser) {
+		res.redirect('/users/profile');
+	});
 });
+
+/****  PROFILE   ****/
+app.get('/users/profile', function (req,res)	{
+	if(req.session.userId === null) {
+   	// User is not logged in, so don't let them pass
+   		res.redirect("/users/login");
+ 	} else {
+   		req.currentUser().then(function(dbUser){
+     	if (dbUser) {
+       		res.render('users/profile',{User:dbUser})
+     		}
+   		});
+ 	}
+});
+
+//**** THIS HAS PROVEN TO NOT BE HELPFUL.....YET!******
+// 	req.currentUser();
+// 	res.render('users/profile');
+// });
+
+// 	if(req.session.userId === null) {
+//    // User is not logged in, so don't let them pass
+//    res.redirect("/users/login");
+//  } else {
+//    req.currentUser().then(function(dbUser){
+//      if (dbUser) {
+//        res.render('users/profile',{User:dbUser})
+//      }
+//    });
+//  }
+// });
+
+						// app.get('/users/profile', function (req,res)	{
+						// 	res.render('users/profile');
+						// });
+
+						// app.get('/users/profile', function(req,res){
+						// 	var testID = req.query.id;
+
+						// 	var url = 'h q?i='+imdbID;
+						// 	request(url, function(err, resp, body){
+						// 		if (!err && resp.statusCode === 200) {
+						// 			var movieData = JSON.parse(body);
+						// 			res.render("movie", {movie: movieData});	
+						// 		}
+						// 	});
+						// });
+
+
+/****  EDIT  ****/
+app.get('/users/profile/edit', function (req,res)	{
+	res.render('users/edit');
+});
+
+
+
+						// app.get('/profile/edit', function(req,res) {
+						// 	var fname = req.body.fname;
+						// 	var lname = req.body.lname;
+						// 	var age = req.body.age;
+						// 	var phone = req.body.phone;
+
+						// 	db.User.findOrCreate({where: {/*connect current user to current user*/}})
+						// 	.then(function(update)	{
+						// 		update.fname = fname,
+						// 		update.lname = lname,
+						// 		update.age   = age,
+						// 		update.phone = phone
+						// 		update.save();
+						// 	})
+
+
+/****  LOGOUT  ****/
+app.get('/users/logout', function (req,res) {
+	// req.logout();
+	req.session.userId = null;
+	req.user = null;
+	res.redirect('/users/login');
+});
+
+
+
+
+
 
 
 

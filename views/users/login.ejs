@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<title>Flyable</title>
+
+</head>
+<body>
+	<div class="container">
+		<div>
+			<a href="/users/signup">Sign Up</a>
+		</div>
+	
+	<h1>Welcome to Flyable!</h1>
+		<div>This Site will inform you about flyable weather conditions.
+		</div>
+
+		<% if (err) { %>
+			<div style="color:red;">
+				<%= err %>
+			</div>
+		<% } %>
+		<form method="POST" action="/users/login">
+			<div>
+				<input type="email" name="email" placeholder="email">
+			</div>
+			<div>
+				<input type="password" name="password" placeholder="password">
+			</div>
+			<button>Login! NOW!!!</button>
+		</form>
+</body>
+</html>

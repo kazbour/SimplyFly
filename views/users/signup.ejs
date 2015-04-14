@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<title>Flyable</title>
 
 </head>
 <body>
 	<div class="container">
 		<div>
-			<a href="/">Login</a>
+			<a href="/users/login">Login</a>
 		</div>
 
 	<h1>Sign up</h1>
@@ -17,12 +18,12 @@
 			Once you created a profile you can set up one or more locations to stay up to date on current weather.
 		</div>
 
-		<form method="POST" action="/signup">
+		<form method="POST" action="/users/signup">
 			<div>
-				<input type="email" name="not defined yet" placeholder="email">
+				<input type="email" name="email" placeholder="email">
 			</div>
 			<div>
-				<input type="password" name="not defined yet" placeholder="password">
+				<input type="password" name="password" placeholder="password">
 			</div>
 			<button>Sign Up</button>
 		</form>

@@ -1,28 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Flyable</title>
 
-</head>
+<% include ./partials/header %>
+
+
 <body>
 	<div class="container">
 		<div>
-			<a href="/signup">Sign Up</a>
+			<a href="/users/logout">Log Out</a>
+			<a href="/users/login">Login</a>
+			<a href="/users/profile">Profile</a>
 		</div>
-	
-	<h1>Welcome to Flyable!</h1>
-		<div>This Site will inform you about flyable weather conditions.
+	<h1>Front Page</h1>
+		<div>
+			I want to display here the location search that will then populate the weather conditions.
+			<a href="http://api.wunderground.com/api/4a708c684d4f6a6b/webcams/q/CA/San_Francisco.json">API</a>
+
 		</div>
-		
-		<form method="POST" action="/login">
-			<div>
-				<input type="email" name="not defined yet" placeholder="email">
+		<div class="row">
+			<div class="col-xs-6 col-xs-offset-3">Choose your location:
+				<form>
+				<select>
+					<option disabled>Select location</option>
+				  <option>San Francisco</option>
+				  <option>Daly City</option>
+				  <option>Berkeley</option>
+				</select>
+				</form>
 			</div>
-			<div>
-				<input type="password" name="not defined yet" placeholder="password">
-			</div>
-			<button>Login! NOW!!!</button>
-		</form>
+		</div>
+
 </body>
 </html>

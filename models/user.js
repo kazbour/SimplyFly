@@ -2,6 +2,12 @@
 var bcrypt = require("bcrypt");
 var salt = bcrypt.genSaltSync(10);
 
+
+/****  Attributes ****/
+/*define module.exports function {
+  instanceMethods,classMethods
+}
+*/
 module.exports = function (sequelize, DataTypes){
   var User = sequelize.define('User', {
     email: { 
@@ -21,23 +27,25 @@ module.exports = function (sequelize, DataTypes){
     lname: DataTypes.STRING,
     age: DataTypes.INTEGER,
   },
+
+  /*** End of Attributes ***/
+
   {
+
     instanceMethods: {
       checkPassword: function(password) {
         return bcrypt.compareSync(password, this.passwordDigest);
-      },
-      addToFavs: function(db,imdbID,rating) {
-        return db.FavoriteMovie
-          .create({imdbID: imdbID, rating: rating, UserId: this.id});
       }
     },
+
     classMethods: {
       encryptPassword: function(password) {
         var hash = bcrypt.hashSync(password, salt);
         return hash;
       },
+
       createSecure: function(email, password) {
-        if(password.length < 4) {
+        if (password.length < 6) {
           throw new Error("Password too short");
         }
         return this.create({
@@ -46,8 +54,8 @@ module.exports = function (sequelize, DataTypes){
         });
 
       },
+
       authenticate: function(email, password) {
-        // find a user in the DB
         return this.find({
           where: {
             email: email
@@ -55,7 +63,7 @@ module.exports = function (sequelize, DataTypes){
         }) 
         .then(function(user){
           if (user === null){
-            throw new Error("Username does not exist");
+            return false;
           }
           else if (user.checkPassword(password)){
             return user;
@@ -64,13 +72,37 @@ module.exports = function (sequelize, DataTypes){
           }
 
         });
-      },
-/*      associate: function(models) {
-        this.hasMany(models.FavoriteMovie);
-        // associations can be defined here
       }
-*/
+      
+      //} // close instanceMethods   
     } // close classMethods
   }); // close define user
+
   return User;
 }; // close User function
+
+
+//////////////////////////////////////////////////////////////
+/*          USER MODEL INFORMATION                          //
+//////////////////////////////////////////////////////////////
+
+DATA BASE:
+Name: flyable_user_db
+           List of relations
+ Schema |     Name      | Type  | Owner 
+--------+---------------+-------+-------
+ public | SequelizeMeta | table | CK
+ public | Users         | table | CK
+(2 rows)
+       
+
+DATA TABLE:
+Name: Users
+Question:
+sequelize model:create --name "User" --attributes email:string,passwordDigest:string,fname:string,lname:string,age:integer
+
+ id | email | passwordDigest | fname | lname | age | createdAt | updatedAt 
+----+----
+(0 rows)
+
+/////////////////////////////////////////*/
