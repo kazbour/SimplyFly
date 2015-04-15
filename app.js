@@ -72,25 +72,102 @@ app.use(express.static(__dirname + '/public'));
 
 
 /****  FRONT PAGE   ****/
- app.get('/', function(req,res){
- 	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:KCADALYC1.json"
- 	request.get(url, function (err, response, body) {
-		if (!err && resp.statusCode === 200) {
+app.get('/', function (req, res) {
+	res.render('index');
+});
+
+app.get('/site/paragliding', function (req, res) {
+	var station = req.query.q3;
+	console.log("This should be your station " + station);
+	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:" + station + ".json";
+	console.log("This is the url " + url);
+
+	request(url, function (err, response, body) {
+		if (!err && response.statusCode === 200) {
 			var jsonData = JSON.parse(body);
-			res.render('index', {taco : url})
+			var windString = jsonData.current_observation.wind_string;
+			console.log("This is the current windString" + windString);
+			var wind_dir = jsonData.current_observation.wind_dir;
+			console.log("Winddirection: " + wind_dir);
+		}
+	res.render("site/paragliding", {windString: windString, wind_dir: wind_dir});
+	})
+});
 
- 	}
 
 
-	console.log("I'm in here 3");
 
-				if (!jsonData.Search) {
-					res.render("search", {movies: [], noMovies: true});
-				}
-				res.render("search", {movies: jsonData.Search, noMovies: false});
 
-res.render('index');
-});;
+
+
+ // app.get('/', function(req,res){
+ // 	var station = req.query.q3;
+ // 	console.log(station);
+ // 	request('http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:' + station + 
+ // 		'.json', function (
+ // 			err, response, body) {
+ // 			console.log(body);
+ // 			var jsonData = JSON.parse(body);
+ // 			var temp_f = jsonData.current_observation.temp_f
+ // 			res.render("index", {
+ // 				loca: temp_f});
+ // 			});
+ // 			});
+
+
+ // var wind_dir = parsed_json['current_observation']['wind_dir'];
+	// 		var temp_f = parsed_json['current_observation']['temp_f'];
+	// 		var wind_string = parsed_json['current_observation']['wind_string'];
+	// 		var wind_degrees = parsed_json['current_observation']['wind_degrees'];
+	// 		var wind_gust_mph = parsed_json['current_observation']['wind_gust_mph'];
+	// 		var wind_gust_mph = parsed_json['current_observation']['wind_gust_mph'];
+	// 		var items=[wind_dir, temp_f] 
+	// 		$('.inner').append(items);
+	// 	});
+
+//  	if (!station) {
+//  		res.render("index", {loca: [], noloca: true});
+//  	} else {
+//  		var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:" + station + ".json";
+//  		console.log(url);
+//  		request(url, function(err, resp, body){
+// 			console.log("I'm in here 2");
+// 			if (!err && resp.statusCode === 200) {
+// 				console.log("I'm in here 3");
+// 				var jsonData = JSON.parse(body);
+// 				console.log(jsonData);
+// 				if (!jsonData.Search) {
+// 					res.render("index", {loca: [], noloca: true});
+// 				}
+// 				res.render("index", {loca: jsonData.Search, noloca: false});
+// 			}
+// 		});
+// 	}
+// });
+
+
+
+//  	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:KCADALYC1.json"
+//  	request.get(url, function (err, response, body) {
+// 		if (!err && resp.statusCode === 200) {
+// 			var jsonData = JSON.parse(body);
+// 			res.render('index', {taco : url})
+
+//  	}
+
+
+// 	console.log("I'm in here 3");
+
+// 				if (!jsonData.Search) {
+// 					res.render("search", {movies: [], noMovies: true});
+// 				}
+// 				res.render("search", {movies: jsonData.Search, noMovies: false});
+
+// res.render('index');
+// });
+
+
+
 
 // var wind_dir = parsed_json['current_observation']['wind_dir'];
 

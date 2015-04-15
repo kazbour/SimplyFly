@@ -1,5 +1,7 @@
-
 <% include ./partials/header %>
+	 
+	
+<title>Flyable</title>
 
 
 <body>
@@ -10,34 +12,17 @@
 			<a href="/users/profile">Profile</a>
 		</div>
 	<h1>Front Page</h1>
-		<div>
-			I want to display here the location search that will then populate the weather conditions.
-			<a href="http://api.wunderground.com/api/4a708c684d4f6a6b/webcams/q/CA/San_Francisco.json">API</a>
-
-		</div>
 		<div class="row">
-			<div class="col-xs-6 col-xs-offset-3">Choose your location:
-				<form action="/search" class="info" method="GET">
-				<select>
-					<option disabled selected>Select location</option>
-				  <option id="SF">KCADALYC1 - Mussel Rock</option>
-				  <option id="DC">Daly City</option>
-				  <option id="BERK">Berkeley</option>
-				</select>
+			<div class="col-xs-6 col-xs-offset-3">
+				<form class="myForm" method="GET" action="site/paragliding">
+					<input type="text" name="q3" placeholder="Search">
+					<button>Click me</button>
 				</form>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-6 col-xs-offset-3">
-				<div class="conditons">
-					
-				</div>
-			</div>
+		
+		<div>
+
 		</div>
-	<div class="container">
-		<div class="inner"><%= taco %>
-			
-		</div>
-	</div>
 </body>
 </html>
