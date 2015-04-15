@@ -17,16 +17,27 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-6 col-xs-offset-3">Choose your location:
-				<form>
+				<form action="/search" class="info" method="GET">
 				<select>
-					<option disabled>Select location</option>
-				  <option>San Francisco</option>
-				  <option>Daly City</option>
-				  <option>Berkeley</option>
+					<option disabled selected>Select location</option>
+				  <option id="SF">KCADALYC1 - Mussel Rock</option>
+				  <option id="DC">Daly City</option>
+				  <option id="BERK">Berkeley</option>
 				</select>
 				</form>
 			</div>
 		</div>
-
+		<div class="row">
+			<div class="col-xs-6 col-xs-offset-3">
+				<div class="conditons">
+					
+				</div>
+			</div>
+		</div>
+	<div class="container">
+		<div class="inner"><%= taco %>
+			
+		</div>
+	</div>
 </body>
 </html>

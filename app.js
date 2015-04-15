@@ -72,9 +72,53 @@ app.use(express.static(__dirname + '/public'));
 
 
 /****  FRONT PAGE   ****/
-app.get('/', function (req,res)	{
-	res.render('index');
-});
+ app.get('/', function(req,res){
+ 	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:KCADALYC1.json"
+ 	request.get(url, function (err, response, body) {
+		if (!err && resp.statusCode === 200) {
+			var jsonData = JSON.parse(body);
+			res.render('index', {taco : url})
+
+ 	}
+
+
+	console.log("I'm in here 3");
+
+				if (!jsonData.Search) {
+					res.render("search", {movies: [], noMovies: true});
+				}
+				res.render("search", {movies: jsonData.Search, noMovies: false});
+
+res.render('index');
+});;
+
+// var wind_dir = parsed_json['current_observation']['wind_dir'];
+
+// app.get('/search', function (req,res)	{
+//   	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:KCADALYC1.json"+current_observation.wind_dir
+//   	var results = JSON.parse(url);
+//   	console.log(results);
+// 	res.render('index');
+
+// });
+
+
+// app.get('/search', function (req,res)	{
+//   	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/conditions/q/CA/san_francisco.json"
+//   	request(url, function(err, response, body){
+//   		var results = JSON.parse(body);
+//   		console.log(results);
+//   		var wind_dir = results.current_observation.wind_dir
+//   		console.log(wind_dir);
+// 		res.render('index');
+// 	});
+// });
+
+//req.query.<classname>
+
+
+
+
 
 
 /****  LOGIN   ****/
@@ -83,7 +127,7 @@ app.get('/users/login', function (req, res) {
 		if (user) {
 			res.redirect('/users/profile');
 		} else {
-			res.render("users/login", {err: req.session.error});
+			res.render('users/login', {err: req.session.error});
 		}
 	});
 });
@@ -133,38 +177,6 @@ app.get('/users/profile', function (req,res)	{
  	}
 });
 
-//**** THIS HAS PROVEN TO NOT BE HELPFUL.....YET!******
-// 	req.currentUser();
-// 	res.render('users/profile');
-// });
-
-// 	if(req.session.userId === null) {
-//    // User is not logged in, so don't let them pass
-//    res.redirect("/users/login");
-//  } else {
-//    req.currentUser().then(function(dbUser){
-//      if (dbUser) {
-//        res.render('users/profile',{User:dbUser})
-//      }
-//    });
-//  }
-// });
-
-						// app.get('/users/profile', function (req,res)	{
-						// 	res.render('users/profile');
-						// });
-
-						// app.get('/users/profile', function(req,res){
-						// 	var testID = req.query.id;
-
-						// 	var url = 'h q?i='+imdbID;
-						// 	request(url, function(err, resp, body){
-						// 		if (!err && resp.statusCode === 200) {
-						// 			var movieData = JSON.parse(body);
-						// 			res.render("movie", {movie: movieData});	
-						// 		}
-						// 	});
-						// });
 
 
 /****  EDIT  ****/
@@ -198,6 +210,8 @@ app.get('/users/logout', function (req,res) {
 	res.redirect('/users/login');
 });
 
+
+app.get
 
 
 
