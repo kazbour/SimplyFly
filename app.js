@@ -13,7 +13,7 @@ var app = express();
 var db = require("./models");
 var Sequelize = require('sequelize');
 var env = process.env;
-
+var api_key = env.MY_API_KEY;
 
 
 //////////////////////////////////////////////////////////////
@@ -73,80 +73,67 @@ app.use(express.static(__dirname + '/public'));
 
 
 /****  FRONT PAGE   ****/
+
 app.get('/', function (req, res) {
 	res.render('index');
 });
 
+
+/****  DISPLAY WEATHER INFORMATION   ****/
+//main functionality
+
 app.get('/site/paragliding', function (req, res) {
 	var station = req.query.q3;
-	var url = "http://api.wunderground.com/api/env.MY_API_KEY/geolookup/conditions/webcams/q/pws:" + station + ".json";
+	var url = "http://api.wunderground.com/api/" + api_key + "/geolookup/conditions/webcams/q/pws:" + station + ".json";
 
 	request(url, function (err, response, body) {
 		if (!err && response.statusCode === 200) {
 			var jsonData = JSON.parse(body);
+
+			//define necessary variables to define flyability:
+
 			var wind_string = jsonData.current_observation.wind_string;
-
 			var wind_dir = jsonData.current_observation.wind_dir;
-
 			var cam_view = jsonData.webcams[27].CURRENTIMAGEURL;
 			var dewpoint_string = jsonData.current_observation.dewpoint_string;
 			var wind_degrees = jsonData.current_observation.wind_degrees;
 			var temp_f = jsonData.current_observation.temp_f;
 			var precip_today_string = jsonData.current_observation.precip_today_string;
+			var wind_mph = jsonData.current_observation.wind_mph;
+			
+			//define flyability for location
+			var myConclusion=0
+
+			if (wind_dir === "W" || "NW" || "SW") {
+			 	myConclusion = "It looks flyable today.";
+			}
+			if (wind_dir === "NNW" || "SSW") {
+				myConclusion = "Not ideal flying conditions. "
+			}
+			 else {  
+				myConclusion = "It is not safe to fly today."
+			};
+
 
 		}
+
 		res.render("site/paragliding", {wind_string: wind_string,
-		wind_dir: wind_dir, 
-		cam_view: cam_view,
-		dewpoint_string:dewpoint_string,
-		wind_degrees: wind_degrees,
-		temp_f: temp_f,
-		precip_today_string: precip_today_string
+			wind_dir: wind_dir, 
+			cam_view: cam_view,
+			dewpoint_string:dewpoint_string,
+			wind_degrees: wind_degrees,
+			temp_f: temp_f,
+			precip_today_string: precip_today_string,
+			wind_mph:wind_mph,
+			myConclusion: myConclusion,
+			station: station
 		});
 	})
 });
 
 
-
- // var wind_dir = parsed_json['current_observation']['wind_dir'];
-	// 		var temp_f = parsed_json['current_observation']['temp_f'];
-	// 		var wind_string = parsed_json['current_observation']['wind_string'];
-	// 		var wind_degrees = parsed_json['current_observation']['wind_degrees'];
-	// 		var wind_gust_mph = parsed_json['current_observation']['wind_gust_mph'];
-	// 		var wind_gust_mph = parsed_json['current_observation']['wind_gust_mph'];
-	// 		var items=[wind_dir, temp_f] 
-	// 		$('.inner').append(items);
-	// 	});
-
-//  	if (!station) {
-//  		res.render("index", {loca: [], noloca: true});
-//  	} else {
-//  		var url = "http://api.wunderground.com/api/env.MY_API_KEY/geolookup/conditions/q/pws:" + station + ".json";
-//  		console.log(url);
-//  		request(url, function(err, resp, body){
-// 			console.log("I'm in here 2");
-// 			if (!err && resp.statusCode === 200) {
-// 				console.log("I'm in here 3");
-// 				var jsonData = JSON.parse(body);
-// 				console.log(jsonData);
-// 				if (!jsonData.Search) {
-// 					res.render("index", {loca: [], noloca: true});
-// 				}
-// 				res.render("index", {loca: jsonData.Search, noloca: false});
-// 			}
-// 		});
-// 	}
-// });
-
-
-
-
-
-
-
-
-
 /****  LOGIN   ****/
+
 app.get('/users/login', function (req, res) {
 	req.currentUser().then(function(user){
 		if (user) {
@@ -173,7 +160,9 @@ app.post('/users/login', function(req,res){
 	  }); 
 });
 
+
 /****  SIGNUP ****/
+
 app.get('/users/signup', function (req,res)	{
 	res.render('users/signup');
 });
@@ -188,7 +177,9 @@ app.post('/users/signup', function(req,res){
 	});
 });
 
+
 /****  PROFILE   ****/
+
 app.get('/users/profile', function (req,res)	{
 	if(req.session.userId === null) {
    	// User is not logged in, so don't let them pass
@@ -202,14 +193,44 @@ app.get('/users/profile', function (req,res)	{
  	}
 });
 
+/****  SAVE FAVORITE LOCATION  ****/
+
+app.post("/favorites", function (req, res) {
+	var station = req.body.station;
+
+	req.currentUser().then (function (myUser)	{
+		if (!myUser==null) {
+			db.Location.create({ userId: myUser.id, station: station }).then(function (location){
+				res.redirect('/users/profile');
+			});
+		} else {
+			res.redirect('/login');
+		}
+	});
+});
+
+app.post('/profile', function(req,res){
+	req.currentUser().then(function(myUser){
+		if (myUser) {
+			db.location.findAll({where: {UserId: User.id}})
+			  .then(function(location){
+			  	console.log("This should be my location", location);
+				res.render('user/profile', {User: myUser, taco: location});
+			});
+		} else {
+			res.redirect('/login');
+		}
+	});
+});
 
 
 /****  EDIT  ****/
+
 app.get('/users/profile/edit', function (req,res)	{
 	res.render('users/edit');
 });
 
-
+//maybe later
 
 						// app.get('/profile/edit', function(req,res) {
 						// 	var fname = req.body.fname;
@@ -217,17 +238,19 @@ app.get('/users/profile/edit', function (req,res)	{
 						// 	var age = req.body.age;
 						// 	var phone = req.body.phone;
 
-						// 	db.User.findOrCreate({where: {/*connect current user to current user*/}})
+						// 	db.User.findOrCreate({where: {email:email}})
 						// 	.then(function(update)	{
 						// 		update.fname = fname,
 						// 		update.lname = lname,
 						// 		update.age   = age,
 						// 		update.phone = phone
 						// 		update.save();
-						// 	})
+						// 	});
+						// });
 
 
 /****  LOGOUT  ****/
+
 app.get('/users/logout', function (req,res) {
 	// req.logout();
 	req.session.userId = null;
@@ -236,31 +259,9 @@ app.get('/users/logout', function (req,res) {
 });
 
 
-app.get
-
-
-
-
-
-
-
-
-
-
-
 
 
 app.listen(3000, function(){
 	console.log("I'm listening");
 });
-
-
-
-
-
-
-
-
-
-
 

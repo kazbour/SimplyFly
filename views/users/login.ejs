@@ -1,35 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<title>Flyable</title>
+<% include ../partials/header %>
 
-</head>
-<body>
-	<div class="container">
-		<div>
-			<a href="/users/signup">Sign Up</a>
-			<a href="/">Home</a>
-		</div>
-	
+<body class="login">
+
 	<h1>Welcome to Flyable!</h1>
-		<div>This Site will inform you about flyable weather conditions.
+		<div>Sign in to check your saved locations
 		</div>
-
-		<% if (err) { %>
-			<div style="color:red;">
-				<%= err %>
-			</div>
-		<% } %>
+			<% if (err) { %>
+				<div style="color:red;">
+					<%= err %>
+				</div>
+			<% } %>
 		<form method="POST" action="/users/login">
 			<div>
-				<input type="email" name="email" placeholder="email">
+				<input class="form" type="email" name="email" placeholder="email">
 			</div>
 			<div>
-				<input type="password" name="password" placeholder="password">
+				<input class="form" type="password" name="password" placeholder="password">
 			</div>
-			<button>Login! NOW!!!</button>
+			<button class="form">Login! NOW!!!</button>
 		</form>
+	</div>
 </body>
 </html>

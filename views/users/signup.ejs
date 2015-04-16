@@ -1,17 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<title>Flyable</title>
+<% include ../partials/header %>
 
-</head>
-<body>
-	<div class="container">
-		<div>
-			<a href="/users/login">Login</a>
-			<a href="/">Home</a>
-		</div>
+<body class="signup">
 
 	<h1>Sign up</h1>
 		<div>Sign up to to customize your location. 
@@ -21,12 +10,12 @@
 
 		<form method="POST" action="/users/signup">
 			<div>
-				<input type="email" name="email" placeholder="email">
+				<input class="form" type="email" name="email" placeholder="email">
 			</div>
 			<div>
-				<input type="password" name="password" placeholder="password">
+				<input class="form" type="password" name="password" placeholder="password">
 			</div>
-			<button>Sign Up</button>
+			<button class="form" >Sign Up</button>
 		</form>
 </body>
 </html>

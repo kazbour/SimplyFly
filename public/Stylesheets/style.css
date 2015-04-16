@@ -1,0 +1,95 @@
+/*Route Specific Style*/
+
+.tester {
+	background: url("file:///Users/CK/Desktop/button.jpg");
+}
+
+body.index {
+      text-align: center;
+      background-color: #586d73;
+	  background-size: cover;
+      color: #f0ebc0;
+    }
+
+body.paragliding {
+
+      background-color: #586d73;
+      background-size: cover;
+      color: #f0ebc0;
+}
+
+body.login {
+
+	background-color: #586d73;
+	color: #f0ebc0;
+
+}
+
+body.profile {
+
+	background: url('http://www.iran-daily.com/content/imgcache/file/66607/0/image_650_365.jpg');
+	background-size: cover;
+	color: #f0ebc0;
+}
+
+body.signup {
+background-color: #586d73;
+color: #f0ebc0;
+
+}
+
+.form {
+	
+	color: black;
+	width: 200px;
+	height: 30px;
+	border-radius: 10px;
+	margin: 10px 10px 10px 10px;
+}
+
+.webcam {
+	
+	border-radius: 10px;
+	margin-top: 20px;
+	border: 1px solid black;
+
+}
+
+/*Navigation Bar*/
+
+.navbar {
+	font-style: helvetica;
+}
+
+
+.PgButton {
+
+	height: 125px;
+	width: 125px;
+	background-size: cover;
+}
+
+/*    ]
+    }
+    h1 {
+      font-size: 70px;
+    }
+    img {
+      margin: 40px 0px 0px 0px;
+      border: 7px solid white;
+      border-radius: 20px;
+    }
+    ul {
+      padding: 10px;
+      background: rgba(0,0,0,0.5);
+    }
+    li {
+      display: inline;
+      padding: 0px 10px 0px 10px;
+    }
+    article {
+     max-width: 500px;
+      padding:20px;
+      margin: 0 auto;
+    }*/
+    

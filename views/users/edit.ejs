@@ -1,41 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<title>Flyable</title>
+<% include ../partials/header %>
 
-</head>
 <body>
-	<div class="container">
-			<div>
-				<a href="/users/logout">Log Out</a>
-				<a href="/users/login">Login</a>
-				<a href="/users/profile">Profile</a>
-				<a href="/">Home</a>
-			</div>
-		</div>
 	<h1>Edit your profile</h1>
 		<div>
 			Fill out some more profile information.
 		</div>
 			
 			<div>
-				<form method="POST" action="/profile"?_method=PUT>
+				<form method="POST" action="/profile?_method=PUT">
 					<div>
-						<input type="string" name="user[fname]" placeholder="First Name" value="<%= user.fname %>">
+						<input class="form" type="string" name="user[fname]" placeholder="First Name" value="<%= user.fname %>">
 					</div>
 
 					<div>
-						<input type="string" name="user[lname]" placeholder="Last Name" value="<%= user.lname %>">
+						<input class="form" type="string" name="user[lname]" placeholder="Last Name" value="<%= user.lname %>">
 					</div>
 
 					<div>
-						<input type="string" name="user[age]" placeholder="Age" value="<%= user.age %>">
+						<input class="form" type="string" name="user[age]" placeholder="Age" value="<%= user.age %>">
 					</div>
 
 					<div>
-						<input type="tel" name="user[phone]" placeholder="Phone number" value="<%= user.phone %>">
+						<input class="form" type="tel" name="user[phone]" placeholder="Phone number" value="<%= user.phone %>">
 					</div>
 					<button>SAVE</button>
 				</form>

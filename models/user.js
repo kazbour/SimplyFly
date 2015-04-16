@@ -39,6 +39,7 @@ module.exports = function (sequelize, DataTypes){
     },
 
     classMethods: {
+
       encryptPassword: function(password) {
         var hash = bcrypt.hashSync(password, salt);
         return hash;
@@ -72,7 +73,11 @@ module.exports = function (sequelize, DataTypes){
           }
 
         });
-      }
+      },
+
+            associate: function(models) {
+        this.belongsToMany(models.Location);
+      },
       
       //} // close instanceMethods   
     } // close classMethods

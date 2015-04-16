@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<title>Flyable</title>
+<% include ../partials/header %>
 
-</head>
 <body>
 	<div class="container">
-		<div>
-			<a href="/">Home</a>
-		</div>
 
 	<h1>See you again soon!</h1>
 		<div>
@@ -19,12 +10,12 @@
 				<div>
 		<form method="POST" action="/users/login">
 			<div>
-				<input type="email" name="email" placeholder="email">
+				<input class="form" type="email" name="email" placeholder="email">
 			</div>
 			<div>
-				<input type="password" name="password" placeholder="password">
+				<input class="form" type="password" name="password" placeholder="password">
 			</div>
-			<button>Login</button>
+			<button class="form">Login</button>
 		</form>
 
 </body>
