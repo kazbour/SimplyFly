@@ -12,6 +12,7 @@ var session = require("express-session");
 var app = express();
 var db = require("./models");
 var Sequelize = require('sequelize');
+var env = process.env;
 
 
 
@@ -78,41 +79,33 @@ app.get('/', function (req, res) {
 
 app.get('/site/paragliding', function (req, res) {
 	var station = req.query.q3;
-	console.log("This should be your station " + station);
-	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:" + station + ".json";
-	console.log("This is the url " + url);
+	var url = "http://api.wunderground.com/api/env.MY_API_KEY/geolookup/conditions/webcams/q/pws:" + station + ".json";
 
 	request(url, function (err, response, body) {
 		if (!err && response.statusCode === 200) {
 			var jsonData = JSON.parse(body);
-			var windString = jsonData.current_observation.wind_string;
-			console.log("This is the current windString" + windString);
+			var wind_string = jsonData.current_observation.wind_string;
+
 			var wind_dir = jsonData.current_observation.wind_dir;
-			console.log("Winddirection: " + wind_dir);
+
+			var cam_view = jsonData.webcams[27].CURRENTIMAGEURL;
+			var dewpoint_string = jsonData.current_observation.dewpoint_string;
+			var wind_degrees = jsonData.current_observation.wind_degrees;
+			var temp_f = jsonData.current_observation.temp_f;
+			var precip_today_string = jsonData.current_observation.precip_today_string;
+
 		}
-	res.render("site/paragliding", {windString: windString, wind_dir: wind_dir});
+		res.render("site/paragliding", {wind_string: wind_string,
+		wind_dir: wind_dir, 
+		cam_view: cam_view,
+		dewpoint_string:dewpoint_string,
+		wind_degrees: wind_degrees,
+		temp_f: temp_f,
+		precip_today_string: precip_today_string
+		});
 	})
 });
 
-
-
-
-
-
-
- // app.get('/', function(req,res){
- // 	var station = req.query.q3;
- // 	console.log(station);
- // 	request('http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:' + station + 
- // 		'.json', function (
- // 			err, response, body) {
- // 			console.log(body);
- // 			var jsonData = JSON.parse(body);
- // 			var temp_f = jsonData.current_observation.temp_f
- // 			res.render("index", {
- // 				loca: temp_f});
- // 			});
- // 			});
 
 
  // var wind_dir = parsed_json['current_observation']['wind_dir'];
@@ -128,7 +121,7 @@ app.get('/site/paragliding', function (req, res) {
 //  	if (!station) {
 //  		res.render("index", {loca: [], noloca: true});
 //  	} else {
-//  		var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:" + station + ".json";
+//  		var url = "http://api.wunderground.com/api/env.MY_API_KEY/geolookup/conditions/q/pws:" + station + ".json";
 //  		console.log(url);
 //  		request(url, function(err, resp, body){
 // 			console.log("I'm in here 2");
@@ -147,51 +140,6 @@ app.get('/site/paragliding', function (req, res) {
 
 
 
-//  	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:KCADALYC1.json"
-//  	request.get(url, function (err, response, body) {
-// 		if (!err && resp.statusCode === 200) {
-// 			var jsonData = JSON.parse(body);
-// 			res.render('index', {taco : url})
-
-//  	}
-
-
-// 	console.log("I'm in here 3");
-
-// 				if (!jsonData.Search) {
-// 					res.render("search", {movies: [], noMovies: true});
-// 				}
-// 				res.render("search", {movies: jsonData.Search, noMovies: false});
-
-// res.render('index');
-// });
-
-
-
-
-// var wind_dir = parsed_json['current_observation']['wind_dir'];
-
-// app.get('/search', function (req,res)	{
-//   	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/geolookup/conditions/q/pws:KCADALYC1.json"+current_observation.wind_dir
-//   	var results = JSON.parse(url);
-//   	console.log(results);
-// 	res.render('index');
-
-// });
-
-
-// app.get('/search', function (req,res)	{
-//   	var url = "http://api.wunderground.com/api/4a708c684d4f6a6b/conditions/q/CA/san_francisco.json"
-//   	request(url, function(err, response, body){
-//   		var results = JSON.parse(body);
-//   		console.log(results);
-//   		var wind_dir = results.current_observation.wind_dir
-//   		console.log(wind_dir);
-// 		res.render('index');
-// 	});
-// });
-
-//req.query.<classname>
 
 
 
