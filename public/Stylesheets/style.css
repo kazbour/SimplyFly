@@ -1,21 +1,41 @@
 /*Route Specific Style*/
-
-.tester {
-	background: url("file:///Users/CK/Desktop/button.jpg");
+body {
+  background-position: center;
 }
 
+.tester {
+	background: url("http://imgur.com/iZDCdHq");
+}
+
+body.search {
+
+    background-color: #f0ebc0;
+    color: #586d73;
+    background: url('https://norlight.files.wordpress.com/2009/10/paraglider1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+
 body.index {
-      text-align: center;
-      background-color: #586d73;
-	  background-size: cover;
-      color: #f0ebc0;
+    position: relative;
+    text-align: center;
+    background: url('http://hdwallpapersfit.com/wp-content/uploads/2015/03/paragliding-wallpaper.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #f0ebc0
+
     }
 
 body.paragliding {
-
-      background-color: #586d73;
+      
+      background: url('http://img2.goodfon.su/original/2560x1600/a/18/sport-zakat-peyzazh.jpg');
       background-size: cover;
-      color: #f0ebc0;
+      position: absolute;
+      background-repeat: no-repeat;
+      background-color: #f0ebc0;
+
 }
 
 body.login {
@@ -26,29 +46,63 @@ body.login {
 }
 
 body.profile {
-
-	background: url('http://www.iran-daily.com/content/imgcache/file/66607/0/image_650_365.jpg');
-	background-size: cover;
-	color: #f0ebc0;
+  background: url('http://i.imgur.com/ek234zA.jpg');
+  background-size: cover;
+  position: absolute;
+  background-repeat: no-repeat;
+	background-color: #586d73;
+	color: #8cbdb0;
 }
 
 body.signup {
-background-color: #586d73;
-color: #f0ebc0;
+  background-color: #586d73;
+  color: #f0ebc0;
 
 }
 
+body.logout {
+ background: url('https://urbanfragment.files.wordpress.com/2013/07/paragliding-at-1900-meters-in-c3b6lc3bcdeniz-turkey-by-sina-demiral-2007.jpg');
+ background-repeat: no-repeat;
+}
+
+.panel-body {
+
+  color: #586d73;
+}
+
+
+/*Button and other forms*/
 .form {
 	
-	color: black;
-	width: 200px;
-	height: 30px;
+  color:black;
 	border-radius: 10px;
 	margin: 10px 10px 10px 10px;
+  background-color: white;
+}
+
+.brand {
+
+  width:65px;
+  height: 65px;
+}
+
+.blah {
+
+ background: transparent;
+   width: 268px;
+   padding: 5px;
+   font-size: 16px;
+   line-height: 1;
+   border: 0;
+   border-radius: 0;
+   height: 34px;
+   -webkit-appearance: none;
 }
 
 .webcam {
 	
+  width: 480px;
+  height: 360px;
 	border-radius: 10px;
 	margin-top: 20px;
 	border: 1px solid black;

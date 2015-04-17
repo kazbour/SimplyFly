@@ -35,7 +35,15 @@ module.exports = function (sequelize, DataTypes){
     instanceMethods: {
       checkPassword: function(password) {
         return bcrypt.compareSync(password, this.passwordDigest);
-      }
+      },
+
+      addToFavs: function(db, station) {
+       return db.Location
+       //userID is the ID in Locations dt that will contain the User.is
+       .create({station: station, userId: this.user.id});
+      },
+
+
     },
 
     classMethods: {
@@ -75,8 +83,8 @@ module.exports = function (sequelize, DataTypes){
         });
       },
 
-            associate: function(models) {
-        this.belongsToMany(models.Location);
+      associate: function(models) {
+        this.hasMany(models.Location, { through: 'Users_Locations'});
       },
       
       //} // close instanceMethods   

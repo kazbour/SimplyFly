@@ -75,69 +75,103 @@ app.use(express.static(__dirname + '/public'));
 /****  FRONT PAGE   ****/
 
 app.get('/', function (req, res) {
-	res.render('index');
+		res.render('index');
 });
 
 
 /****  DISPLAY WEATHER INFORMATION   ****/
 //main functionality
 
-app.get('/site/paragliding', function (req, res) {
-	var station = req.query.q3;
-	var url = "http://api.wunderground.com/api/" + api_key + "/geolookup/conditions/webcams/q/pws:" + station + ".json";
+app.get('/search', function (req, res) {
+	var station = req.query.q3 || null;
+	var userId = req.session.userId || null;
 
-	request(url, function (err, response, body) {
-		if (!err && response.statusCode === 200) {
-			var jsonData = JSON.parse(body);
-
-			//define necessary variables to define flyability:
-
-			var wind_string = jsonData.current_observation.wind_string;
-			var wind_dir = jsonData.current_observation.wind_dir;
-			var cam_view = jsonData.webcams[27].CURRENTIMAGEURL;
-			var dewpoint_string = jsonData.current_observation.dewpoint_string;
-			var wind_degrees = jsonData.current_observation.wind_degrees;
-			var temp_f = jsonData.current_observation.temp_f;
-			var precip_today_string = jsonData.current_observation.precip_today_string;
-			var wind_mph = jsonData.current_observation.wind_mph;
+	if(!station) {
+		// Get all stations to use in the search form.
+		db.Location.all()
+			.then(function(locations) {
+				res.render('search', {locations: locations});
 			
-			//define flyability for location
-			var myConclusion=0
+		})
+		
 
-			if (wind_dir === "W" || "NW" || "SW") {
-			 	myConclusion = "It looks flyable today.";
+	} else {
+		var url = "http://api.wunderground.com/api/" + api_key + "/geolookup/conditions/webcams/q/pws:" + station + ".json";
+
+		request(url, function (err, response, body) {
+			if (!err && response.statusCode === 200) {
+				var jsonData = JSON.parse(body);
+
+				//define necessary variables to define flyability:
+
+				var wind_string = jsonData.current_observation.wind_string;
+				var wind_dir = jsonData.current_observation.wind_dir;
+				var cam_view = jsonData.webcams[27].CURRENTIMAGEURL;
+				var dewpoint_string = jsonData.current_observation.dewpoint_string;
+				var wind_degrees = jsonData.current_observation.wind_degrees;
+				var temp_f = jsonData.current_observation.temp_f;
+				var precip_today_string = jsonData.current_observation.precip_today_string;
+				var wind_mph = jsonData.current_observation.wind_mph;
+				
+				//define flyability for location
+
+
+				
+				var myConclusion=0
+
+
+				// my suggestion for how to calculate flyability
+				// var mountainDirection = 270; // WEST FACING
+				// var low_degrees = mountainDirection - 45;
+				// var high_degrees = mountainDirection + 45;
+
+				// if ( mountainDirection-45 < wind_dir && mountainDirection+45 > wind_dir ) {
+				// 	myConclusion = "It looks flyable today.";
+				// } elseif ( mountainDirection-75 < wind_dir && mountainDirection+75 > wind_dir) {
+
+				// } else {
+				// 	myConclusion = "Unsafe.";
+				// }
+
+
+
+
+				if (wind_dir === "W" || "NW" || "SW") {
+				 	myConclusion = "It looks flyable today.";
+				}
+				if (wind_dir === "NNW" || "SSW") {
+					myConclusion = "Not ideal flying conditions. "
+				}
+				 else {  
+					myConclusion = "It is not safe to fly today."
+				};
+
+
 			}
-			if (wind_dir === "NNW" || "SSW") {
-				myConclusion = "Not ideal flying conditions. "
-			}
-			 else {  
-				myConclusion = "It is not safe to fly today."
-			};
 
-
-		}
-
-		res.render("site/paragliding", {wind_string: wind_string,
-			wind_dir: wind_dir, 
-			cam_view: cam_view,
-			dewpoint_string:dewpoint_string,
-			wind_degrees: wind_degrees,
-			temp_f: temp_f,
-			precip_today_string: precip_today_string,
-			wind_mph:wind_mph,
-			myConclusion: myConclusion,
-			station: station
-		});
-	})
+			res.render("site/paragliding", {wind_string: wind_string,
+				wind_dir: wind_dir, 
+				cam_view: cam_view,
+				dewpoint_string:dewpoint_string,
+				wind_degrees: wind_degrees,
+				temp_f: temp_f,
+				precip_today_string: precip_today_string,
+				wind_mph:wind_mph,
+				myConclusion: myConclusion,
+				station: station,
+				userId: userId
+			});
+		})
+	}
 });
 
 
 /****  LOGIN   ****/
 
-app.get('/users/login', function (req, res) {
+app.get('/login', function (req, res) {
 	req.currentUser().then(function(user){
 		if (user) {
-			res.redirect('/users/profile');
+			res.redirect('/profile', { user: user});
 		} else {
 			res.render('users/login', {err: req.session.error});
 		}
@@ -145,17 +179,17 @@ app.get('/users/login', function (req, res) {
 });
 
 
-app.post('/users/login', function(req,res){
+app.post('/login', function(req,res){
 	var email = req.body.email;
 	var password = req.body.password;
 	db.User.authenticate(email,password)
 	  .then(function(myUser){
 	  	if(myUser) {
 	  		req.login(myUser);
-	  		res.redirect('/users/profile');
+	  		res.redirect('/search');
 	  	} else {
 	  		req.session.error = "Wrong email or password";
-	  		res.redirect('/users/login');
+	  		res.redirect('/login');
 	  	}
 	  }); 
 });
@@ -163,12 +197,12 @@ app.post('/users/login', function(req,res){
 
 /****  SIGNUP ****/
 
-app.get('/users/signup', function (req,res)	{
+app.get('/signup', function (req,res)	{
 	res.render('users/signup');
 });
 
 
-app.post('/users/signup', function(req,res){
+app.post('/signup', function(req,res){
 	var email = req.body.email;
 	var password = req.body.password;
 	db.User.createSecure(email,password)
@@ -180,53 +214,47 @@ app.post('/users/signup', function(req,res){
 
 /****  PROFILE   ****/
 
-app.get('/users/profile', function (req,res)	{
+app.get('/profile', function (req,res)	{
 	if(req.session.userId === null) {
    	// User is not logged in, so don't let them pass
-   		res.redirect("/users/login");
+   		res.redirect("/login");
  	} else {
-   		req.currentUser().then(function(dbUser){
-     	if (dbUser) {
-       		res.render('users/profile',{User:dbUser})
-     		}
+ 		db.User.find(req.session.userId).then(function(dbUser){
+ 			dbUser.getLocations().then(function(locations) {
+ 				res.render('users/profile', { user: dbUser, locations: locations });
+
+ 			})
+       		
    		});
  	}
 });
 
 /****  SAVE FAVORITE LOCATION  ****/
 
-app.post("/favorites", function (req, res) {
+app.post('/profile', function(req, res) {
+	// THis route is ONLY intended to save the favorite to the database, another route will be responsible for displaying a user's profile
 	var station = req.body.station;
+	var userId = req.session.userId || null;
 
-	req.currentUser().then (function (myUser)	{
-		if (!myUser==null) {
-			db.Location.create({ userId: myUser.id, station: station }).then(function (location){
-				res.redirect('/users/profile');
-			});
-		} else {
-			res.redirect('/login');
-		}
-	});
-});
-
-app.post('/profile', function(req,res){
-	req.currentUser().then(function(myUser){
-		if (myUser) {
-			db.location.findAll({where: {UserId: User.id}})
-			  .then(function(location){
-			  	console.log("This should be my location", location);
-				res.render('user/profile', {User: myUser, taco: location});
-			});
-		} else {
-			res.redirect('/login');
-		}
-	});
-});
+	if(userId) {
+		db.User.find(userId).then(function (user) {
+			console.log("\n\n\n\n\n\nTHIS IS THE USER:", user);
+			db.Location.find({where: {stationCode: station }} )
+				.then(function(location) {
+					console.log("\n\n\n\n\nTHIS IS THE LOCATION FOR FAVORITING:", location);
+					user.addLocation(location);
+					res.redirect('/profile');
+				});
+		});
+	} else {
+		res.redirect('/login');
+	}
+})
 
 
 /****  EDIT  ****/
 
-app.get('/users/profile/edit', function (req,res)	{
+app.get('/profile/edit', function (req,res)	{
 	res.render('users/edit');
 });
 
@@ -251,12 +279,20 @@ app.get('/users/profile/edit', function (req,res)	{
 
 /****  LOGOUT  ****/
 
-app.get('/users/logout', function (req,res) {
+app.get('/logout', function (req,res) {
 	// req.logout();
 	req.session.userId = null;
 	req.user = null;
-	res.redirect('/users/login');
+	res.render('users/logout');
 });
+
+
+
+// DO NOT USE THIS ROUTE UNLESS YOU WANT TO DESTROY YOUR DATABASE
+
+// app.get('/sync', function(req, res) {
+// 	db.sequelize.sync().then(function() { res.send("DB Synced successfully.") })
+// })
 
 
 

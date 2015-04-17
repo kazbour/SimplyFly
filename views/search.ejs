@@ -1,0 +1,28 @@
+<% include ./partials/header %>
+<body class="search">	 
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-4">
+			<h1>Looking to Launch?</h1>
+		</div>
+	</div>
+		<div class="row1">
+			<div>
+				<div>Choose your location:</div>
+				<div class="sceletor">
+					<form action="/search" method="GET">
+						<select name="q3">
+							<option></option>
+							<% locations.forEach(function(location) { %>
+							<option value="<%= location.stationCode %>"><%= location.stationName %></option>
+							<%	}) %>
+						</select>
+						<button type="submit" class="form">Search</button>
+					</form>
+				</div>
+			</div>
+		</div>
+</div>
+
+<% include ./partials/footer %>

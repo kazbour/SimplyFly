@@ -1,23 +1,21 @@
 <% include ../partials/header %>
 
 <body class="login">
-
-	<h1>Welcome to Flyable!</h1>
-		<div>Sign in to check your saved locations
+		<div>Please log in.
 		</div>
 			<% if (err) { %>
 				<div style="color:red;">
 					<%= err %>
 				</div>
 			<% } %>
-		<form method="POST" action="/users/login">
+		<form method="POST" action="/login">
 			<div>
 				<input class="form" type="email" name="email" placeholder="email">
 			</div>
 			<div>
 				<input class="form" type="password" name="password" placeholder="password">
 			</div>
-			<button class="form">Login! NOW!!!</button>
+			<button class="form">Login</button>
 		</form>
 	</div>
 </body>
