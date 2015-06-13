@@ -1,35 +1,5 @@
 # Flyable 
 
-
-Part 2:
-
-Edit Profile (User database)
-	Send data to database
-	make phone number only accept certain values
-
-Hardcode new locations and find close by weather stations (locations database)
-
-Error messages when:
-	not signed in and trying to access sign in stuff
-	email no valid
-	username already exists
-	something cannot be loaded... 
-
-
-sign up go directly to profile
-
-Form to adjust flyable logarithm (logarithm results input in database hardcode)
-	
-what is a good wind speed / skill level (user database)
-
-Save locations in profile (delete button)
-
-Add SMS function
-when flyable then send text message. Can be turned on or off.
-
-
-
-
 ###Description:
 FlyAble is a simple Weather application catering for paragliders. It gives paragliders and hanggliders information about wind (& weather) conditions at their usual flying spot.  
 
@@ -46,40 +16,3 @@ Bonus && || future Add-ons:
 ###API used:
 
 Weather Underground API
-
-
-* delete Route
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Flyable</title>
-
-</head>
-<body>
-
-	<h1>Sorry to see you leave</h1>
-		<div>
-			Sign Up below if you have changed your mind.
-		</div>
-				<div>
-		<form method="POST" action="/signup"?_method=DELETE>
-			<div>
-				<input type="email" name="email" placeholder="email">
-			</div>
-			<div>
-				<input type="password" name="password" placeholder="password">
-			</div>
-			<button>Sign Up</button>
-		</form>
-
-</body>
-</html>
-
-```
-
-
-
-
