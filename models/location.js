@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     stationCode: {
       type: DataTypes.STRING,
       field: 'station_code'
-    }
+    }//,
+//launchDirection: DataTypes.INTEGER
 
   }, {
     classMethods: {

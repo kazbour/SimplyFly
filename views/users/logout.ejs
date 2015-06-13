@@ -1,20 +1,21 @@
 <% include ../partials/header %>
 
 <body class="logout">
-	<div class="container">
-
-	<h1>Keep Calm and go Paragliding</h1>
-
-				<div>
-		<form method="POST" action="/users/login">
-			<div>
-				<input class="form" type="email" name="email" placeholder="email">
+	<div class="jumbotron">
+	  <div class="row">
+		<h1 class='col-xs-4 col-xs-offset-4'>Keep Calm - keep Flying</h1>
+	  </div>
+	  <div class="row">
+		<div class='col-xs-4 col-xs-offset-4'>Please log in</div>
+		  <div class='col-xs-4 col-xs-offset-4'>
+			<form method="POST" action="/users/login">
+					<input class="form" type="email" name="email" placeholder="email">
+					<input class="form" type="password" name="password" placeholder="password">
+				<button class="form">Log in</button>
+			</form>
 			</div>
-			<div>
-				<input class="form" type="password" name="password" placeholder="password">
-			</div>
-			<button class="form">Log back in</button>
-		</form>
-
+	   </div>
+	</div>
 </body>
 </html>
+

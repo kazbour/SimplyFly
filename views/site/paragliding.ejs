@@ -2,129 +2,62 @@
 <body class="paragliding">
 
 <div class="container">
-	<div class="row">
+	<div class="row" >
 		<div class="col-xs-4 col-xs-offset-1">
-			<div><h1>Weather at launch site</h1>
+			<div><h1>Weather at Launch: <%= station %></h1>
 				<% if(userId) { %>
-<!-- //should put something into url -->
-	<form method="POST" action="/profile"> 
-		<input type="hidden" value="<%= station %>" name="station">
-		<button type="submit" >Save to Favorites</button>
-	</form>
-<% } else { %>
-<h3>To save this to your favorites. Please <a href="/login">login</a>.</h3>
-
-<% } %>
+					<!-- //should put something into url -->
+						<form method="POST" action="/profile"> 
+							<input type="hidden" value="<%= station %>" name="station">
+							<button type="submit" class="btn-primary" >Save to Favorites</button>
+						</form>
+					<% } else { %>
+					<h3>To save this to your favorites. Please <a href="/login">login</a>.</h3>
+					<% } %>
 			</div>
 		</div>
+		<!-- <div class="row">
+			<div class="col-md-3 col-md-offset-3">
+				<div><img class="webcam" src="<%= cam_view %>" alt="Webcam is offline"></img>
+				</div>
+			</div>
+		</div> -->
 	</div>
 </div>		
 			
-
 <div class="container">
-	<div class="row">
+	<div class="row" class="result">
 		<div class="col-xs-4 col-xs-offset-1">
-			<div class="panel panel-warning">
+			<div class="result" class="panel panel-warning">
 	 			<div class="panel-heading">
 	    			<h3 class="panel-title">Prognosis:</h3>
 	  			</div>
-		  		<div class="panel-body"><%= myConclusion %>
-		  			For more information check the <a href src='http://www.wunderground.com/cgi-bin/findweather/getForecast?query=pws:KCADALYC1'>Forecast</a>
-		  		</div>
+		  		<div class="panel-body"><%= myConclusion %></div>
 			</div>
-	  	</div>
-	</div>
-</div>
-
-<div class="container">
-	<div class="row">
+	  	</div>	
+	  </div></br>	
+	  <div class="row">
 		<div class="col-xs-4 col-xs-offset-1">
-			<div class="panel panel-warning">
+			<div class="result" class="panel panel-warning">
 	 			<div class="panel-heading">
 	    			<h3 class="panel-title">Summary:</h3>
 	  			</div>
-		  		<div class="panel-body"><%= wind_string %>
+		  		<div class="panel-body">
+		  			<ul>
+		  				<li>
+		  					<%= wind_string %>
+		  				</li>
+		  				<li>
+		  					Dewpoint: <%= dewpoint_string %>
+		  				</li>
+		  				<li>
+		  					Current temperature: <%= temp_f %>
+		  				</li>
+		  				<li>
+		  					Precipitation: <%= precip_today_string %>
+		  				</li>
+		  			</ul>
 		  		</div>
-			</div>
-	  	</div>
-	</div>
-</div>
-
-<!-- <div class="container">
-	<div class="row">
-		<div class="col-xs-4 col-xs-offset-1">
-			<div class="panel panel-warning">
-	 			<div class="panel-heading">
-	    			<h3 class="panel-title">Current wind direction:</h3>
-	  			</div>
-		  		<div class="panel-body"><%= wind_dir %>
-		  		</div>
-			</div>
-	  	</div>
-	</div>
-</div> -->
-
-
-<div class="container">
-	<div class="row">
-		<div class="col-xs-4 col-xs-offset-1">
-			<div class="panel panel-warning">
-	 			<div class="panel-heading">
-	    			<h3 class="panel-title">Dewpoint:</h3>
-	  			</div>
-		  		<div class="panel-body"><%= dewpoint_string %>
-		  		</div>
-			</div>
-	  	</div>
-	</div>
-</div>
-
-<div class="container">
-	<div class="row">
-		<div class="col-xs-4 col-xs-offset-1">
-			<div class="panel panel-warning">
-	 			<div class="panel-heading">
-	    			<h3 class="panel-title">Current temperature:</h3>
-	  			</div>
-		  		<div class="panel-body"><%= temp_f %>
-		  		</div>
-			</div>
-	  	</div>
-	</div>
-</div>
-		
-<div class="container">
-	<div class="row">
-		<div class="col-xs-4 col-xs-offset-1">
-			<div class="panel panel-warning">
-	 			<div class="panel-heading">
-	    			<h3 class="panel-title">Precipitation:</h3>
-	  			</div>
-		  		<div class="panel-body"><%= precip_today_string %>
-		  		</div>
-			</div>
-	  	</div>
-	</div>
-</div>			
-
-<div class="container">
-	<div class="row">
-		<div class="col-xs-4 col-xs-offset-1">
-			<div class="panel panel-warning">
-	 			<div class="panel-heading">
-	    			<h3 class="panel-title">Current webcam image overlooking Mussel Rock.</h3>
-	  			</div>
-		  		<div class="panel-body">Seeing other paragliders is a good for save flying conditions.
-		  		</div>
-			</div>
-	  	</div>
-	</div>
-</div>
-	
-<div class="container">
-	<div class="row">
-		<div class="col-xs-4 col-xs-offset-1">
-			<div><img class="webcam" src="<%= cam_view %>" alt="Webcam is offline"></img>
 			</div>
 		</div>
 	</div>

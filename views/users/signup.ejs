@@ -1,19 +1,24 @@
 <% include ../partials/header %>
 
 <body class="signup">
-
-	<h1>Welcome to Flyable!</h1>
-		<div>Sign up to to customize your launch locations. 
-		</div>
-
-		<form method="POST" action="/signup">
-			<div>
-				<input class="form" type="email" name="email" placeholder="email">
-			</div>
-			<div>
-				<input class="form" type="password" name="password" placeholder="password">
-			</div>
-			<button class="form" >Sign Up</button>
-		</form>
+	<div class="jumbotron">
+		  <div class="row">
+			<h1 class='col-xs-4 col-xs-offset-4'>SimplyFly</h1>
+		  </div>
+	  <div class="row">
+		<div class='col-xs-4 col-xs-offset-4'>Sign up to to customize your launch locations.</div>
+		  <div class='col-xs-4 col-xs-offset-4'>
+			<form method="POST" action="/signup">
+				<div>
+					<input class="form" type="email" name="email" placeholder="email">
+				</div>
+				<div>
+					<input class="form" type="password" name="password" placeholder="password">
+				</div>
+				<button class="form" >Sign Up</button>
+			</form>
+		  </div>
+	   </div>
+	</div>
 </body>
 </html>

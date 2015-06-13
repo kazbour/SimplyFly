@@ -70,6 +70,10 @@ body.logout {
   color: #586d73;
 }
 
+.result {
+  background-color:rgba(192,192,192,0.5);
+  border-radius: 12px;
+}
 
 /*Button and other forms*/
 .form {
@@ -82,8 +86,14 @@ body.logout {
 
 .brand {
 
-  width:65px;
-  height: 65px;
+  width:25px;
+  height: 25px;
+}
+
+.jumbotron {
+
+  background-color:rgba(192,192,192,0);
+  margin-top: 30px;
 }
 
 .blah {
@@ -101,10 +111,10 @@ body.logout {
 
 .webcam {
 	
-  width: 480px;
-  height: 360px;
-	border-radius: 10px;
-	margin-top: 20px;
+  width: 440px;
+  height: 320px;
+	border-radius: 8px;
+	margin-top: 0px;
 	border: 1px solid black;
 
 }

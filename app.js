@@ -88,82 +88,131 @@ app.get('/search', function (req, res) {
 
 	if(!station) {
 		// Get all stations to use in the search form.
+		//if station is undefined only render search but 
 		db.Location.all()
 			.then(function(locations) {
-				res.render('search', {locations: locations});
-			
-		})
-		
-
-	} else {
-		var url = "http://api.wunderground.com/api/" + api_key + "/geolookup/conditions/webcams/q/pws:" + station + ".json";
-
-		request(url, function (err, response, body) {
+				res.render('search', {locations: locations
+			});			
+		});		
+	} 
+		else {
+			//else parse API and declare functionality below --> what is displayed on paragliding.ejs
+			var url = "http://api.wunderground.com/api/" + api_key + "/geolookup/conditions/webcams/q/pws:" + station + ".json";
+			request(url, function (err, response, body) {
 			if (!err && response.statusCode === 200) {
 				var jsonData = JSON.parse(body);
+				console.log(url);
 
-				//define necessary variables to define flyability:
+					//WEBCAM VIEW - explained:
 
-				var wind_string = jsonData.current_observation.wind_string;
-				var wind_dir = jsonData.current_observation.wind_dir;
-				var cam_view = jsonData.webcams[27].CURRENTIMAGEURL;
-				var dewpoint_string = jsonData.current_observation.dewpoint_string;
-				var wind_degrees = jsonData.current_observation.wind_degrees;
-				var temp_f = jsonData.current_observation.temp_f;
-				var precip_today_string = jsonData.current_observation.precip_today_string;
-				var wind_mph = jsonData.current_observation.wind_mph;
+					//webCamIndex is correct index position in webcam array to display the image of selected station
+					//webcam images show sometimes the wrong image because array index changes accoding
+					//to which webcams are turned on or off. To avoid this find arrayindex of needed station.
+					//however more than 1 per station id so it wont work either
+
+					// var webCamIndex = 0;
+					
+					// //function to find specific value(webcamview) in array regardless of current position
+					// var indexFinder = function ()	{
+						
+					// 	//iterate through array of webacams and choose index of array where name is station name
+					// 	for (var i=0; i<jsonData.webcams.length; i++) {
+					// 		if (jsonData.webcams[i].assoc_station_id == KCADALYC1)	{
+					// 			webCamIndex=i;
+					// 			console.log("this is my webCamIndex" + webCamIndex); 
+					// 		}
+					// 		else {
+					// 			webCamIndex = null;
+					// 		}
+					// 			return webCamIndex;
+					// 	}
+					// };
+
+				// TEMP SOLUTION
+				//hardcoding cam view until permanent solution
+				var cam_view = jsonData.webcams[2].CURRENTIMAGEURL;
+console.log(cam_view);
+				//define other necessary variables (winddirection,windspeed etc) that define flyability:
+				var curObs = jsonData.current_observation;
+				var wind_string = curObs.wind_string;
+				var wind_dir = curObs.wind_dir;
+				var dewpoint_string = curObs.dewpoint_string;
+				var wind_degrees = curObs.wind_degrees;
+				var temp_f = curObs.temp_f;
+				var precip_today_string = curObs.precip_today_string;
+				var wind_mph = curObs.wind_mph;
+				var cam_view = '';
+
+					//calculate flyability for location
+
+					//min&maxDegree are limits of possible wind direction to fly
+					//min&max Speed are limits of windspeed
+					
+					var face = 0;
+					var myConclusion = '';
+					var minDegree = 0;
+					var maxDegree = 0;
+					var minSpeedIdeal = 20;
+					var maxSpeedIdeal = 50;
+					var minSpeedLimit = 10;
+					var maxSpeedLimit = 60;
+
+						
+					// db.Location.find({where: {stationCode: station }} )
+					// .then(function(station) {
+						//calculate needed wind direction & webcam view for each location
+
+						if (station = "KCADALYC1")	{
+							face = 270;
+							cam_view = "http://www.wunderground.com/webcams/barenjager/1/show.html";
+						}
+						else if (station = "KCAMILPI6")	{
+							face = 180;
+							cam_view = "http://png-5.findicons.com/files/icons/1043/i_like_buttons_3c/512/remote_go.png";
+						}
+						else if (station = "KCASTINS5")	{
+							face = 90;
+							cam_view = "http://png-5.findicons.com/files/icons/1043/i_like_buttons_3c/512/remote_go.png";
+						}
+						else {
+							face = 90;
+							cam_view = "http://png-5.findicons.com/files/icons/1043/i_like_buttons_3c/512/remote_go.png blah blah";
+						};
+			
+						//calculate Flyability 
+
+						if ( (face - 45 < wind_degrees && face + 45 > wind_degrees ) && 
+							( wind_mph < 12 && wind_mph < 14) )	{
+							myConclusion = "Flyable Conditions";
+						} 	else if ( (face - 75 < wind_degrees && face + 75 > wind_degrees) &&
+									(wind_mph < 11 && wind_mph < 16) )	 {
+									myConclusion = "Not Ideal Flying Conditions"
+						} 	else {
+
+							myConclusion = "It is not safe to fly today.";
+						};
+
+					// });
+				}//closes if-err
+				//associate elements to site 'tacos'
+				res.render("site/paragliding", {
+					wind_string: wind_string,
+					wind_dir: wind_dir, 
+					cam_view: cam_view,
+					dewpoint_string:dewpoint_string,
+					wind_degrees: wind_degrees,
+					temp_f: temp_f,
+					precip_today_string: precip_today_string,
+					wind_mph:wind_mph,
+					myConclusion: myConclusion,
+					station: station,
+					userId: userId
+				});
 				
-				//define flyability for location
+		})//close request function
+		}//else statement
+}); //closes app.post
 
-
-				
-				var myConclusion=0
-
-
-				// my suggestion for how to calculate flyability
-				// var mountainDirection = 270; // WEST FACING
-				// var low_degrees = mountainDirection - 45;
-				// var high_degrees = mountainDirection + 45;
-
-				// if ( mountainDirection-45 < wind_dir && mountainDirection+45 > wind_dir ) {
-				// 	myConclusion = "It looks flyable today.";
-				// } elseif ( mountainDirection-75 < wind_dir && mountainDirection+75 > wind_dir) {
-
-				// } else {
-				// 	myConclusion = "Unsafe.";
-				// }
-
-
-
-
-				if (wind_dir === "W" || "NW" || "SW") {
-				 	myConclusion = "It looks flyable today.";
-				}
-				if (wind_dir === "NNW" || "SSW") {
-					myConclusion = "Not ideal flying conditions. "
-				}
-				 else {  
-					myConclusion = "It is not safe to fly today."
-				};
-
-
-			}
-
-			res.render("site/paragliding", {wind_string: wind_string,
-				wind_dir: wind_dir, 
-				cam_view: cam_view,
-				dewpoint_string:dewpoint_string,
-				wind_degrees: wind_degrees,
-				temp_f: temp_f,
-				precip_today_string: precip_today_string,
-				wind_mph:wind_mph,
-				myConclusion: myConclusion,
-				station: station,
-				userId: userId
-			});
-		})
-	}
-});
 
 
 /****  LOGIN   ****/
@@ -207,7 +256,7 @@ app.post('/signup', function(req,res){
 	var password = req.body.password;
 	db.User.createSecure(email,password)
 	.then(function(signupUser) {
-		res.redirect('/users/profile');
+		res.redirect('/login');
 	});
 });
 
@@ -260,21 +309,21 @@ app.get('/profile/edit', function (req,res)	{
 
 //maybe later
 
-						// app.get('/profile/edit', function(req,res) {
-						// 	var fname = req.body.fname;
-						// 	var lname = req.body.lname;
-						// 	var age = req.body.age;
-						// 	var phone = req.body.phone;
+						app.get('/profile/edit', function(req,res) {
+							var fname = req.body.fname;
+							var lname = req.body.lname;
+							var age = req.body.age;
+							var phone = req.body.phone;
 
-						// 	db.User.findOrCreate({where: {email:email}})
-						// 	.then(function(update)	{
-						// 		update.fname = fname,
-						// 		update.lname = lname,
-						// 		update.age   = age,
-						// 		update.phone = phone
-						// 		update.save();
-						// 	});
-						// });
+							db.User.findOrCreate({where: {email:email}})
+							.then(function(update)	{
+								update.fname = fname,
+								update.lname = lname,
+								update.age   = age,
+								update.phone = phone
+								update.save();
+							});
+						});
 
 
 /****  LOGOUT  ****/
@@ -299,5 +348,10 @@ app.get('/logout', function (req,res) {
 
 app.listen(3000, function(){
 	console.log("I'm listening");
+});
+
+
+app.get('/', function (req, res) {
+		res.render('index');
 });
 
