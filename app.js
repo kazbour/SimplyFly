@@ -9,13 +9,12 @@ var pg = require("pg");
 var request = require('request');
 var methodOverride = require('method-override');
 var session = require("express-session");
-var app = express();
 var db = require("./models");
 var Sequelize = require('sequelize');
 var env = process.env;
 var api_key = env.MY_API_KEY;
 var cool = require('cool-ascii-faces');
-
+var app = express();
 
 //////////////////////////////////////////////////////////////
 /*					MIDDLEWARE								*/
