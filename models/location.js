@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        this.hasMany(models.User, { through: 'Users_Locations' });
+        this.belongsToMany(models.User, { through: 'Users_Locations' });
       }
     }
   });

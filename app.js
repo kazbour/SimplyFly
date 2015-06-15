@@ -14,6 +14,7 @@ var db = require("./models");
 var Sequelize = require('sequelize');
 var env = process.env;
 var api_key = env.MY_API_KEY;
+var cool = require('cool-ascii-faces');
 
 
 //////////////////////////////////////////////////////////////
@@ -27,7 +28,7 @@ app.set('view engine', 'ejs');
 app.use(session({
 	secret: "If I tell you it won't be a secret anymore.",
 	resave: false,
-	save: {uninitialized: true}
+	saveUninitialized: true
 }));
 
 

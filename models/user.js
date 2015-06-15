@@ -84,7 +84,7 @@ module.exports = function (sequelize, DataTypes){
       },
 
       associate: function(models) {
-        this.hasMany(models.Location, { through: 'Users_Locations'});
+        this.belongsToMany(models.Location, { through: 'Users_Locations'});
       },
       
       //} // close instanceMethods   
