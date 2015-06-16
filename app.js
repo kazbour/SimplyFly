@@ -15,6 +15,8 @@ var env = process.env;
 var api_key = env.MY_API_KEY;
 var cool = require('cool-ascii-faces');
 var app = express();
+var http = require('http');
+var server = http.createServer(app);
 
 //////////////////////////////////////////////////////////////
 /*					MIDDLEWARE								*/
@@ -346,8 +348,8 @@ app.get('/logout', function (req,res) {
 
 
 
-app.listen(3000, function(){
-	console.log("I'm listening");
+app.listen(process.env.PORT || 3000, function(){
+    console.log("I'm listening");
 });
 
 
